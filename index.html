@@ -76,8 +76,46 @@
         <script type="text/coffeescript" src="coffee/collections.coffee"></script>
         <script type="text/coffeescript" src="coffee/views.coffee"></script>
         <script type="text/coffeescript" src="coffee/app.coffee"></script>
-        <script type="text/coffeescript">
-            window.goyakaStreamApp = new GoyakaStreamApp()
+        <script type="text/javascript">
+            window.fbAsyncInit = function () {
+                var FB_APP_ID = null;
+                if(window.location.hostname == "surenm.github.io") {
+                    FB_APP_ID = '828975910445989';
+                } else {
+                    FB_APP_ID = '829776180365962';
+                }
+                FB.init({
+                    appId: FB_APP_ID,
+                    status: true,
+                    cookie: true,
+                    xfbml: true
+                });
+
+                FB.getLoginStatus(function (response) {
+                    if (response.status === 'connected') {
+                        var uid = response.authResponse.userID;
+                        var at = response.authResponse.accessToken;
+                        console.log(uid);
+                        console.log(at);
+                    } else if (response.status === 'not_authorized') {
+                        FB.login();
+                    } else {
+                        // the user isn't logged in to Facebook.
+                    }
+                });
+            };
+
+            (function (d, debug) {
+                var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+                if (d.getElementById(id)) {
+                    return;
+                }
+                js = d.createElement('script');
+                js.id = id;
+                js.async = true;
+                js.src = "https://connect.facebook.net/en_US/all" + (debug ? "/debug" : "") + ".js";
+                ref.parentNode.insertBefore(js, ref);
+            }(document, /*debug*/ true));
         </script>
     </body>
 </html>
