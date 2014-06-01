@@ -1,0 +1,16 @@
+{
+  "manifest_version": 2,
+
+  "name": "Goyaka Stream",
+  "description": "A simple chrome app experiment to play goyaka playlist songs",
+  "version": "1.0",
+
+  "permissions": [
+    "https://*.facebook.com/"
+  ],
+  "browser_action": {
+    "default_icon": "radio.png",
+    "default_popup": "popup-local.html"
+  },
+  "content_security_policy": "script-src 'self' 'unsafe-eval' https://connect.facebook.net; object-src 'self'"
+}
