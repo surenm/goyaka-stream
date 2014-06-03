@@ -13,16 +13,6 @@
         <div>{{errMessage}}</div>
         <div ng-show="!waiting">
             <input type="button" ng-click="sortByLike()" value="Top Rated">
-            <input type="button" ng-click="prev()" value="prev">
-            <input type="button" ng-click="toggle()" value="{{paused}}">
-            <input type="button" ng-click="next()" value="next">
-            <ul>
-                <li ng-repeat="item in data  | startFrom:currentPage*pageSize | limitTo:pageSize  track by $index">
-                    <img ng-src="{{item.picture}}" />
-                    <div>{{item.name}}</div>
-                    <button ng-click="play($index)">Load</button>
-                </li>
-            </ul>
             <button ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1">
                 Previous
             </button>
@@ -30,6 +20,14 @@
             <button ng-disabled="currentPage >= data.length/pageSize - 1" ng-click="currentPage=currentPage+1">
                 Next
             </button>
+            <ul>
+                <li ng-repeat="item in data  | startFrom:currentPage*pageSize | limitTo:pageSize  track by $index">
+                    <img ng-src="{{item.picture}}" />
+                    <div>{{item.name}}</div>
+                    <button ng-click="play($index)">Load</button>
+                </li>
+            </ul>
+
         </div>
     </div>
     <script type="text/javascript" src="js/foreground/client.js"></script>

@@ -47,7 +47,10 @@ function mainController($scope) {
     $scope.play = function(index) {
         console.log("PLAY");
         $scope.errMessage = "";
-        var videoId = getIdFromUrl(feed_items[index].link);
+        console.log($scope.currentPage)
+        console.log($scope.pageSize)
+        console.log(index)
+        var videoId = getIdFromUrl(feed_items[$scope.currentPage * $scope.pageSize + index].link);
         console.log("QQE");
         console.log(videoId);
         if (videoId == null) {
