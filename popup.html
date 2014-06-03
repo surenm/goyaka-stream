@@ -1,20 +1,38 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-        <title>Goyaka Stream Popup</title>
-        <meta name="description" content="">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <style>
-            iframe {
-                height: 450px;
-                width: 700px;
-                border: 0px;
-            }
-        </style>
-    </head>
-    <body>
-        <iframe src="https://surenm.github.io/goyaka-stream"> </iframe>
-    </body>
+
+<html ng-app="qq" ng-csp>
+
+<head>
+    <title>Goyaka Stream Popup</title>
+    <script type="text/javascript" src="js/third_party/angular.min.js"></script>
+    <script type="text/javascript" src="js/third_party/lodash.js"></script>
+</head>
+
+<body>
+    <div ng-controller="mainController">
+        <div>{{errMessage}}</div>
+        <div ng-show="!waiting">
+            <input type="button" ng-click="sortByLike()" value="Top Rated">
+            <input type="button" ng-click="prev()" value="prev">
+            <input type="button" ng-click="toggle()" value="{{paused}}">
+            <input type="button" ng-click="next()" value="next">
+            <ul>
+                <li ng-repeat="item in data  | startFrom:currentPage*pageSize | limitTo:pageSize  track by $index">
+                    <img ng-src="{{item.picture}}" />
+                    <div>{{item.name}}</div>
+                    <button ng-click="play($index)">Load</button>
+                </li>
+            </ul>
+            <button ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1">
+                Previous
+            </button>
+            {{currentPage+1}}/{{numberOfPages()}}
+            <button ng-disabled="currentPage >= data.length/pageSize - 1" ng-click="currentPage=currentPage+1">
+                Next
+            </button>
+        </div>
+    </div>
+    <script type="text/javascript" src="js/foreground/client.js"></script>
+</body>
+
 </html>

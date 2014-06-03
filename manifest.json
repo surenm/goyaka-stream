@@ -1,16 +1,22 @@
 {
-  "manifest_version": 2,
+    "manifest_version": 2,
 
-  "name": "Goyaka Stream",
-  "description": "A simple chrome app experiment to play goyaka playlist songs",
-  "version": "1.0",
+    "name": "Goyaka Stream",
+    "description": "A simple chrome app experiment to play goyaka playlist songs",
+    "version": "1.0",
 
-  "permissions": [
-    "https://*.facebook.com/"
-  ],
-  "browser_action": {
-    "default_icon": "radio.png",
-    "default_popup": "popup.html"
-  },
-  "content_security_policy": "script-src 'self' 'unsafe-eval' https://connect.facebook.net; object-src 'self'"
+    "permissions": [
+        "storage",
+        "unlimitedStorage",
+        "webRequest",
+        "*://*.youtube.com/*"
+    ],
+    "browser_action": {
+        "default_icon": "radio.png",
+        "default_popup": "popup.html"
+    },
+    "background": {
+        "page": "background.html"
+    },
+    "content_security_policy": "script-src 'self' 'unsafe-eval' https://graph.facebook.com https://connect.facebook.net https://www.youtube.com/player_api https://ssl.google-analytics.com https://s.ytimg.com https://apis.google.com; object-src 'self'"
 }
