@@ -54,7 +54,6 @@ function mainController($scope) {
     }
 }
 
-var patt = /(youtu(?:\.be|be\.com)\/(?:.*v(?:\/|=)|(?:.*\/)?)([\w'-]+))/i;
 
 
 
