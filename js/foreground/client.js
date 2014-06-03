@@ -2,19 +2,11 @@ var app = angular.module("qq", []);
 var back = chrome.extension.getBackgroundPage();
 var player = back.player;
 var feed_items = back.feed_items;
+var currentPlaying = 0;
 
 function mainController($scope) {
     $scope.errMessage = "";
-    $scope.errCallBack = function(err) {
-        console.log("$scope error");
-        if (err == 150 || err == "150") {
-            console.log("WEC");
-            console.log(err);
-            $scope.$apply(function() {
-                $scope.errMessage = "This is song is not playable outside youtube.";
-            });
-        }
-    }
+
     back.errCallBack = $scope.errCallBack;
     $scope.currentPage = 0;
     $scope.pageSize = 10;
@@ -34,44 +26,37 @@ function mainController($scope) {
                 return 0;
             }
         })
+        back.feed_items = $scope.data;
     }
-    $scope.prev = function() {
-        console.log("prev");
+    $scope.errCallBack = function(err) {
+        console.log("$scope error");
+        if (err == 150 || err == "150") {
+            console.log("WEC");
+            console.log(err);
+            $scope.$apply(function() {
+                $scope.errMessage = "This is song is not playable outside youtube.";
+            });
+        }
     }
     $scope.next = function() {
-        player.loadVideoById()
+        if (player.id == 9) {
+            $scope.currentPage++;
+        }
+        player.playNext();
     }
     $scope.toggle = function() {
         console.log("toggle");
     }
     $scope.play = function(index) {
-        console.log("PLAY");
+        $scope.currentPlaying = index
         $scope.errMessage = "";
-        console.log($scope.currentPage)
-        console.log($scope.pageSize)
-        console.log(index)
-        var videoId = getIdFromUrl(feed_items[$scope.currentPage * $scope.pageSize + index].link);
-        console.log("QQE");
-        console.log(videoId);
-        if (videoId == null) {
-            console.log("Not supported.");
-        } else {
-            player.loadVideoById(videoId);
-        }
+        player.play($scope.currentPage * $scope.pageSize + index);
     }
 }
 
 var patt = /(youtu(?:\.be|be\.com)\/(?:.*v(?:\/|=)|(?:.*\/)?)([\w'-]+))/i;
 
-var getIdFromUrl = function(url) {
-    var ret = patt.exec(url);
-    console.log(ret);
-    if (ret.length >= 3) {
-        return (patt.exec(url)[2]);
-    } else {
-        return null;
-    }
-}
+
 
 app.filter('startFrom', function() {
     return function(input, start) {

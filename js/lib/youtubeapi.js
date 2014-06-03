@@ -84,5 +84,8 @@ YT_ready(function() {
                 "onError": youtubeError
             }
         });
+
+        player_ready();
+
     }
 });
