@@ -3,14 +3,12 @@ var goyakaRadioFeedUrl = "https://graph.facebook.com/v2.0/187054981393266/feed";
 var FB_APP_ID = 303369369825890;
 var feed_items = [];
 var errCallBack;
+var changeCallback;
 
 var access_token;
 
 function getFeeds(cb) {
-    console.log("QWEWQWQE")
-    console.log(feed_items);
     if (feed_items.length === 0) {
-        console.log("######3E")
         chrome.storage.local.get(["lastUpdated", "feed_items"], function(items) {
             var lastUpdated = items.lastUpdated;
             console.log(items);
@@ -75,6 +73,7 @@ function youtubeError(error) {
     console.log(error);
     console.log("error");
     if (errCallBack) {
+        feed_items[player.index.error = true]
         console.log("Calln callback");
         errCallBack(error.data);
     }
@@ -92,19 +91,20 @@ function youtubeStageChange(event) {
 function player_ready() {
     player.playNext = function() {
         this.index++;
-        player.play(this.index + 1);
+        player.play(this.index);
     }
 
     player.play = function(index) {
         this.index = index;
         var id = getIdFromUrl(feed_items[index].link);
+        changeCallback(index);
         if (id) {
             player.loadVideoById(id);
         } else {
             player.playNext();
         }
-    }
 
+    }
 }
 
 var getIdFromUrl = function(url) {

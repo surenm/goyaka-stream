@@ -3,6 +3,7 @@ var player;
 var frame_id = "iframeDiv";
 var state;
 
+
 function callPlayer(func, args) {
     if (window.jQuery && frame_id instanceof jQuery) frame_id = frame_id.get(0).id;
     var iframe = document.getElementById(frame_id);
@@ -73,7 +74,6 @@ function onYouTubePlayerAPIReady() {
     var before = document.getElementsByTagName("script")[0];
     before.parentNode.insertBefore(s, before);
 })();
-var player;
 
 YT_ready(function() {
     var frameID = getFrameID("tabs2");

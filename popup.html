@@ -6,13 +6,17 @@
     <title>Goyaka Stream Popup</title>
     <script type="text/javascript" src="js/third_party/angular.min.js"></script>
     <script type="text/javascript" src="js/third_party/lodash.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/angular-ccp.css"></link>
 </head>
 
 <body>
     <div ng-controller="mainController">
         <div style="width:750px;height:300px">
-            <div>{{errMessage}}</div>
-            <div ng-show="!waiting">
+            <div ng-show="errMessage">
+                {{errMessage}}
+            </div>
+            <div>Current : {{song_index}}</div>
+            <div>
                 <input type="button" ng-click="sortByLike()" value="Top Rated">
                 <button ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1">
                     Previous

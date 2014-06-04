@@ -6,12 +6,19 @@ var currentPlaying = 0;
 
 function mainController($scope) {
     $scope.errMessage = "";
-
-    back.errCallBack = $scope.errCallBack;
-    $scope.currentPage = 0;
     $scope.pageSize = 10;
     $scope.data = [];
     $scope.waiting = true;
+    if (player.index) {
+        $scope.song_index = player.index;
+    } else {
+        $scope.song_index = 0;
+    }
+    $scope.state;
+    $scope.currentPage = Math.floor($scope.song_index / $scope.pageSize);
+    $scope.$watch('song_index', function(oldVal, newVal) {
+        $scope.currentPage = Math.floor($scope.song_index / $scope.pageSize);
+    })
     $scope.numberOfPages = function() {
         return Math.ceil($scope.data.length / $scope.pageSize);
     }
@@ -28,20 +35,26 @@ function mainController($scope) {
         })
         back.feed_items = $scope.data;
     }
+    $scope.changeCallback = function(new_index) {
+        if (console) {
+            console.log("CHAZ");
+            console.log(new_index);
+            $scope.song_index = player.index;
+        }
+    }
     $scope.errCallBack = function(err) {
-        console.log("$scope error");
-        if (err == 150 || err == "150") {
-            console.log("WEC");
-            console.log(err);
-            $scope.$apply(function() {
-                $scope.errMessage = "This is song is not playable outside youtube.";
-            });
+        if (console) {
+            console.log("$scope error");
+            if (err == 150 || err == "150") {
+                console.log("WEC");
+                console.log(err);
+                $scope.$apply(function() {
+                    $scope.errMessage = "This is song is not playable outside youtube.";
+                });
+            }
         }
     }
     $scope.next = function() {
-        if (player.id == 9) {
-            $scope.currentPage++;
-        }
         player.playNext();
     }
     $scope.toggle = function() {
@@ -52,10 +65,9 @@ function mainController($scope) {
         $scope.errMessage = "";
         player.play($scope.currentPage * $scope.pageSize + index);
     }
+    back.errCallBack = $scope.errCallBack;
+    back.changeCallback = $scope.changeCallback;
 }
-
-
-
 
 app.filter('startFrom', function() {
     return function(input, start) {
