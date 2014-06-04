@@ -7,53 +7,82 @@
     <script type="text/javascript" src="js/third_party/angular.min.js"></script>
     <script type="text/javascript" src="js/third_party/lodash.js"></script>
     <link rel="stylesheet" type="text/css" href="css/angular-ccp.css"></link>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"></link>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css"></link>
+    <link rel="stylesheet" type="text/css" href="css/style.css"></link>
 </head>
 
 <body>
-    <div ng-controller="mainController">
+    <div ng-controller="mainController" class="container">
         <div style="width:750px;height:300px">
-            <div ng-show="errMessage">
-                {{errMessage}}
-            </div>
-            <div ng-show="state==3">
-                Loading....
-            </div>
-            <div>
+            <div class="row">
+                <div class="col-xs-8">
+                    <div ng-show="errMessage">
+                        {{errMessage}}
+                    </div>
+                    <div ng-show="state==3">
+                        Loading....
+                    </div>
+                    <b>
                 Current : {{song_index}}
-                <span ng-show="state==1">
-                    <input type="button" ng-click="pause()" value="Pause">
-                </span>
-                <span ng-show="state==2">
-                    <input type="button" ng-click="resume()" value="Resume">
-                </span>
-                <span>
-                    <input type="button" ng-click="next()" value="Next Song">
-                </span>
+                </b>
+                </div>
+                <div class="col-xs-4 pull-right">
+                    <span ng-show="state==3">
+                        <button type="button" ng-disabled="trune" class="btn">Loading..</button>
+                    </span>
+                    <span ng-show="state==1">
+                        <button type="button" ng-click="pause()" class="btn">Pause</button>
+                    </span>
+                    <span ng-show="state==2">
+                        <button ng-click="resume()" value="Resume" class="btn">Resume</button>
+                    </span>
+                    <span>
+                        <button ng-click="next()" value="Next Song" class="btn">Next Song</button>
+                    </span>
+                </div>
             </div>
             <div>
                 <input type="button" ng-click="sortByLike()" value="Top Rated">
-                <button ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1">
-                    Previous Page
-                </button>
-                {{currentPage+1}}/{{numberOfPages()}}
-                <button ng-disabled="currentPage >= data.length/pageSize - 1" ng-click="currentPage=currentPage+1">
-                    Next Page
-                </button>
-                <ul>
-                    <li ng-repeat="item in data  | startFrom:currentPage*pageSize | limitTo:pageSize  track by $index">
-                        <div>
-                            <span ng-show="item.error">
-                                Unplayable
-                            </span>
-                            <span ng-if=" song_index == (currentPage* pageSize + $index)">
-                                >>>
-                            </span>
-                            <img ng-src="{{item.picture}}" width="40px" height="30px" />{{item.name}} Likes = {{item.likes.summary.total_count}} Comments = {{item.comments.summary.total_count}}
-                            <button ng-click="play($index)">Load</button>
-                        </div>
-                    </li>
-                </ul>
 
+                <div class="container class_container">
+                    <div ng-repeat="item in data  | startFrom:currentPage*pageSize | limitTo:pageSize  track by $index">
+                        <div class="row {{getRowColor($index)}} {{getErrorClass(item.error)}}">
+                            <div class="col-xs-1">
+                                <span ng-show="item.error">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </span>
+                                <span ng-if=" song_index == (currentPage* pageSize + $index)">
+                                    <span class="glyphicon glyphicon-arrow-right"></span>
+                                </span>
+                            </div>
+                            <div class="col-xs-1">
+                                <img ng-src="{{item.picture}}" width="40px" height="30px" />
+                            </div>
+                            <div class="col-xs-5">
+                                {{item.name}}
+                            </div>
+                            <div class="col-xs-2">
+                                <span class="glyphicon glyphicon-thumbs-up"></span>{{item.likes.summary.total_count}}
+                                <span class="glyphicon glyphicon-comment"></span>{{item.comments.summary.total_count}}
+                            </div>
+                            <div class="col-xs-2">
+                                <span ng-show="getRowColor($index)==green">
+                                    <button class="btn" ng-click="play($index)">
+                                        <span class="glyphicon glyphicon-play"></span>Play
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    <button ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1">
+                        Previous Page
+                    </button>
+                    {{currentPage+1}}/{{numberOfPages()}}
+                    <button ng-disabled="currentPage >= data.length/pageSize - 1" ng-click="currentPage=currentPage+1">
+                        Next Page
+                    </button>
+                </div>
             </div>
         </div>
     </div>

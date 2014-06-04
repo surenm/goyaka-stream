@@ -6,7 +6,7 @@ var currentPlaying = 0;
 
 function mainController($scope) {
     $scope.errMessage = "";
-    $scope.pageSize = 10;
+    $scope.pageSize = 8;
     $scope.data = [];
     $scope.waiting = true;
     if (player.index) {
@@ -48,6 +48,11 @@ function mainController($scope) {
         })
         back.feed_items = $scope.data;
     }
+    $scope.getRowColor = function(index) {
+        if ($scope.song_index == ($scope.currentPage * $scope.pageSize + index)) {
+            return "bg-primary";
+        }
+    }
     $scope.stateCallback = function(code) {
         if (console) {
             console.log("QWEWe");
@@ -71,6 +76,11 @@ function mainController($scope) {
                     $scope.errMessage = "This is song is not playable outside youtube.";
                 });
             }
+        }
+    }
+    $scope.getErrorClass = function(boolvar) {
+        if (boolvar) {
+            return "bg-danger";
         }
     }
     $scope.next = function() {
