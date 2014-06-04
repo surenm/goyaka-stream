@@ -4,6 +4,7 @@ var FB_APP_ID = 303369369825890;
 var feed_items = [];
 var errCallBack;
 var changeCallback;
+var stateCallback;
 
 var access_token;
 
@@ -72,8 +73,10 @@ getFeeds(function() {});
 function youtubeError(error) {
     console.log(error);
     console.log("error");
+    feed_items[player.index].error = true
+    console.log(player.index)
+    console.log(feed_items[player.index])
     if (errCallBack) {
-        feed_items[player.index.error = true]
         console.log("Calln callback");
         errCallBack(error.data);
     }
@@ -83,6 +86,10 @@ function youtubeError(error) {
 function youtubeStageChange(event) {
     console.log(event);
     console.log("change");
+    player.state = event.data;
+    if (stateCallback) {
+        stateCallback(event.data);
+    }
     if (event.data == 0) {
         player.playNext();
     }
@@ -101,7 +108,9 @@ function player_ready() {
         if (id) {
             player.loadVideoById(id);
         } else {
-            player.playNext();
+            youtubeError({
+                data: 150
+            })
         }
 
     }

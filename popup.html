@@ -15,19 +15,36 @@
             <div ng-show="errMessage">
                 {{errMessage}}
             </div>
-            <div>Current : {{song_index}}</div>
+            <div ng-show="state==3">
+                Loading....
+            </div>
+            <div>
+                Current : {{song_index}}
+                <span ng-show="state==1">
+                    <input type="button" ng-click="pause()" value="Pause">
+                </span>
+                <span ng-show="state==2">
+                    <input type="button" ng-click="resume()" value="Resume">
+                </span>
+                <span>
+                    <input type="button" ng-click="next()" value="Next Song">
+                </span>
+            </div>
             <div>
                 <input type="button" ng-click="sortByLike()" value="Top Rated">
                 <button ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1">
-                    Previous
+                    Previous Page
                 </button>
                 {{currentPage+1}}/{{numberOfPages()}}
                 <button ng-disabled="currentPage >= data.length/pageSize - 1" ng-click="currentPage=currentPage+1">
-                    Next
+                    Next Page
                 </button>
                 <ul>
                     <li ng-repeat="item in data  | startFrom:currentPage*pageSize | limitTo:pageSize  track by $index">
                         <div>
+                            <span ng-show="item.error">
+                                Unplayable
+                            </span>
                             <span ng-if=" song_index == (currentPage* pageSize + $index)">
                                 >>>
                             </span>

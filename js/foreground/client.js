@@ -14,7 +14,11 @@ function mainController($scope) {
     } else {
         $scope.song_index = 0;
     }
-    $scope.state;
+    if (player.state) {
+        $scope.state = player.state;
+    } else {
+        $scope.state = 0;
+    }
     $scope.currentPage = Math.floor($scope.song_index / $scope.pageSize);
     $scope.$watch('song_index', function(oldVal, newVal) {
         $scope.currentPage = Math.floor($scope.song_index / $scope.pageSize);
@@ -35,10 +39,16 @@ function mainController($scope) {
         })
         back.feed_items = $scope.data;
     }
+    $scope.stateCallback = function(code) {
+        if (console) {
+            console.log("QWEWe");
+            $scope.$apply(function() {
+                $scope.state = code;
+            });
+        }
+    }
     $scope.changeCallback = function(new_index) {
         if (console) {
-            console.log("CHAZ");
-            console.log(new_index);
             $scope.song_index = player.index;
         }
     }
@@ -57,8 +67,11 @@ function mainController($scope) {
     $scope.next = function() {
         player.playNext();
     }
-    $scope.toggle = function() {
-        console.log("toggle");
+    $scope.pause = function() {
+        player.pauseVideo();
+    }
+    $scope.resume = function() {
+        player.playVideo();
     }
     $scope.play = function(index) {
         $scope.currentPlaying = index
@@ -67,6 +80,7 @@ function mainController($scope) {
     }
     back.errCallBack = $scope.errCallBack;
     back.changeCallback = $scope.changeCallback;
+    back.stateCallback = $scope.stateCallback;
 }
 
 app.filter('startFrom', function() {
