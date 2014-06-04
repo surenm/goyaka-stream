@@ -32,7 +32,16 @@ function mainController($scope) {
     $scope.sortByLike = function() {
         $scope.data = _.sortBy($scope.data, function(item) {
             if (item["likes"]) {
-                return item.likes.data.length;
+                var comments = 0;
+                var likes = 0;
+                if (item.comments) {
+                    comments = item.comments.summary.total_count;
+                }
+                if (item.likes) {
+                    likes = item.likes.summary.total_count;
+                }
+
+                return -1 * (comments * 5 + likes);
             } else {
                 return 0;
             }

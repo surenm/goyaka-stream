@@ -48,7 +48,7 @@
                             <span ng-if=" song_index == (currentPage* pageSize + $index)">
                                 >>>
                             </span>
-                            <img ng-src="{{item.picture}}" width="40px" height="30px" />{{item.name}}
+                            <img ng-src="{{item.picture}}" width="40px" height="30px" />{{item.name}} Likes = {{item.likes.summary.total_count}} Comments = {{item.comments.summary.total_count}}
                             <button ng-click="play($index)">Load</button>
                         </div>
                     </li>

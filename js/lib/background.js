@@ -1,5 +1,5 @@
 var access_token_url = "https://graph.facebook.com/oauth/access_token?client_id=303369369825890&client_secret=4bbe29c93ca31dfc8f116a9a4e3de670&grant_type=client_credentials";
-var goyakaRadioFeedUrl = "https://graph.facebook.com/v2.0/187054981393266/feed";
+var goyakaRadioFeedUrl = "https://graph.facebook.com/v2.0/187054981393266/feed?fields=comments.limit(1).summary(true),likes.limit(1).summary(true),link,message,picture,name";
 var FB_APP_ID = 303369369825890;
 var feed_items = [];
 var errCallBack;
