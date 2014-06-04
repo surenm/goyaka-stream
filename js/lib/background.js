@@ -111,7 +111,7 @@ var getIdFromUrl = function(url) {
     var patt = /(youtu(?:\.be|be\.com)\/(?:.*v(?:\/|=)|(?:.*\/)?)([\w'-]+))/i;
     var ret = patt.exec(url);
     console.log(ret);
-    if (ret.length && ret.length >= 3) {
+    if (ret && ret.length && ret.length >= 3) {
         return (patt.exec(url)[2]);
     } else {
         return null;

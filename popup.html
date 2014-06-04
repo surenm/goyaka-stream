@@ -28,6 +28,9 @@
                 <ul>
                     <li ng-repeat="item in data  | startFrom:currentPage*pageSize | limitTo:pageSize  track by $index">
                         <div>
+                            <span ng-if=" song_index == (currentPage* pageSize + $index)">
+                                >>>
+                            </span>
                             <img ng-src="{{item.picture}}" width="40px" height="30px" />{{item.name}}
                             <button ng-click="play($index)">Load</button>
                         </div>
