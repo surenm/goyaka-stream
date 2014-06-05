@@ -6,7 +6,7 @@ var currentPlaying = 0;
 
 function mainController($scope) {
     $scope.errMessage = "";
-    $scope.pageSize = 8;
+    $scope.pageSize = 5;
     $scope.data = [];
     $scope.waiting = true;
     if (player.index) {

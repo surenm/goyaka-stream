@@ -5,5 +5,46 @@
     background-color: hsl(48, 89%, 50%);
     background-border: hsl(48, 89%, 50%)
 }
-.class_container {
+
+.navbar-brand {
+  font-size: 20px;
+  vertical-align: bottom;
+  margin-top: -5px;
+}
+
+#content {
+  width: 768px;
+  height: 400px;
+}
+
+#songs-list {
+  border-right: 1px dotted #999;
+  margin-left: 0px;
+  padding-left: 0px;
+}
+
+.actions {
+  margin-bottom: 20px;
+  text-align: center;
+}
+.song {
+  min-height: 40px;
+  padding: 5px 0px;
+}
+
+.song:hover {
+  background-color: #c1e2b3;
+}
+
+.song .song-name {
+  margin-left: 20px;
+}
+
+.song .song-thumbnail {
+  max-height: 40px;
+}
+
+.song .song-thumbnail img {
+  width: 70px;
+  height: 40px;
 }
