@@ -9,12 +9,12 @@ function mainController($scope) {
     $scope.pageSize = 5;
     $scope.data = [];
     $scope.waiting = true;
-    if (player.index) {
+    if (player && player.index) {
         $scope.song_index = player.index;
     } else {
         $scope.song_index = 0;
     }
-    if (player.state) {
+    if (player && player.state) {
         $scope.state = player.state;
     } else {
         $scope.state = 0;
