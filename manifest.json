@@ -19,5 +19,5 @@
     "background": {
         "page": "background.html"
     },
-    "content_security_policy": "script-src 'self' 'unsafe-eval' https://graph.facebook.com https://connect.facebook.net https://www.youtube.com/player_api https://ssl.google-analytics.com https://s.ytimg.com https://apis.google.com; object-src 'self'"
+    "content_security_policy": "script-src 'self' 'unsafe-eval' https://facebook.com https://graph.facebook.com https://connect.facebook.net https://www.youtube.com/player_api https://ssl.google-analytics.com https://s.ytimg.com https://apis.google.com; object-src 'self'"
 }

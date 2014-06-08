@@ -40,7 +40,8 @@ getFrameID = (id) ->
 #                                 position in the queue
 
 # Removes the first func from the array, and execute func
-onYouTubePlayerAPIReady = ->
+window.onYouTubePlayerAPIReady = ->
+  console.log "zxc"
   YT_ready true
   return
 window.player = undefined
@@ -62,12 +63,14 @@ YT_ready = (->
 )()
 (->
   s = document.createElement("script")
+  console.log "ZZZ"
   s.src = ((if location.protocol is "https:" then "https" else "https")) + "://www.youtube.com/player_api"
   before = document.getElementsByTagName("script")[0]
   before.parentNode.insertBefore s, before
   return
 )()
 YT_ready ->
+  console.log "uuu"
   frameID = getFrameID("tabs2")
   if frameID #If the frame exists
     window.player = new YT.Player(frameID,

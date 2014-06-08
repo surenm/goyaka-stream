@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 
-<html ng-app="qq" ng-csp>
+<html ng-csp>
+<!-- <html> -->
 
 <head>
     <title>Goyaka Stream Popup</title>
+    <script type="text/javascript" src="js/third_party/lodash.js"></script>
     <script type="text/javascript"src="js/third_party/coffee-script.js"></script>
     <script type="text/javascript" src="js/third_party/angular.min.js"></script>
-    <script type="text/javascript" src="js/third_party/lodash.js"></script>
     <link rel="stylesheet" type="text/css" href="css/angular-ccp.css"></link>
     <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"></link>
     <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css"></link>
     <link rel="stylesheet" type="text/css" href="css/style.css"></link>
+    <script type="text/coffeescript" src="coffee/foreground/client.coffee"></script>
 </head>
 
 <body>
@@ -61,15 +63,15 @@
                 </div>
             </div>
             <div id="song-info" class="col-xs-5">
-                <img ng-src="{{item.picture}}"/>
-                {{item.name}}
+                <img ng-src="{{getCurrentItem().picture}}"/>
+                {{getCurrentItem().name}}
             </div>
             <div>
                 <!-- <input type="button" ng-click="sortByLike()" value="Top Rated"> -->
             </div>
         </div>
     </div>
-    <script type="text/javascript" src="js/foreground/client.js"></script>
+
 </body>
 
 </html>
