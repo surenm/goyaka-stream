@@ -1,74 +1,71 @@
 <!DOCTYPE html>
-
 <html ng-app="qq" ng-csp>
+    <head>
+        <title>Goyaka Stream Popup</title>
+        <script type="text/javascript" src="js/third_party/angular.min.js"></script>
+        <script type="text/javascript" src="js/third_party/lodash.js"></script>
+        <link rel="stylesheet" type="text/css" href="css/angular-ccp.css"></link>
+        <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"></link>
+        <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css"></link>
+        <link rel="stylesheet" type="text/css" href="css/style.css"></link>
+    </head>
 
-<head>
-    <title>Goyaka Stream Popup</title>
-    <script type="text/javascript" src="js/third_party/angular.min.js"></script>
-    <script type="text/javascript" src="js/third_party/lodash.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/angular-ccp.css"></link>
-    <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"></link>
-    <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css"></link>
-    <link rel="stylesheet" type="text/css" href="css/style.css"></link>
-</head>
-
-<body>
-    <div ng-controller="mainController" id="content">
-        <nav class="navbar navbar-default">
-            <div class="container-fluid">
-                <div class="navbar-brand">
-                    <img src="./radio.png" height="25px"/> Goyaka Stream
-                </div>
-                <div ng-show="errMessage">
-                    {{errMessage}}
-                </div>
-            </div>
-        </nav>
-        <div id="songs" class="container">
-            <div id="songs-list" class="col-xs-7">
-                <div class="actions row">
-                    <div class="btn-group">
-                        <button ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span></button>
-                        <button ng-click="previous()" value="Previous Song" class="btn btn-default"><span class="glyphicon glyphicon-backward"></span></button>
-                        <button ng-show="state==1" type="button" ng-click="pause()" class="btn btn-default"><span class="glyphicon glyphicon-pause"></span></button>
-                        <button ng-show="state==2 || state == 0" ng-click="resume()" value="Resume" class="btn btn-default"><span class="glyphicon glyphicon-play"></span></button>
-                        <button ng-show="state==3" class="btn btn-default"><img src="./img/loading.gif" height="18px"/></button>
-                        <button ng-click="next()" value="Next Song" class="btn btn-default"><span class="glyphicon glyphicon-forward"></span></button>
-                        <button ng-disabled="currentPage >= data.length/pageSize - 1" ng-click="currentPage=currentPage+1" class="btn btn-default"> <span class="glyphicon glyphicon-chevron-right"></span></button>
+    <body>
+        <div ng-controller="mainController" id="content">
+            <nav class="navbar navbar-default">
+                <div class="container-fluid">
+                    <div class="navbar-brand">
+                        <img src="./radio.png" height="25px"/> Goyaka Stream
                     </div>
-
-                    <div class="clearfix"></div>
+                    <div ng-show="errMessage">
+                        {{errMessage}}
+                    </div>
                 </div>
-                <div class="song row" ng-click="play($index)" ng-repeat="item in data  | startFrom:currentPage*pageSize | limitTo:pageSize  track by $index">
-                    <div class="link" >
-                        <div class="song-thumbnail col-xs-2">
-                            <img ng-src="{{item.picture}}"/>
+            </nav>
+            <div id="songs" class="container">
+                <div id="songs-list" class="col-xs-7">
+                    <div class="actions row">
+                        <div class="btn-group">
+                            <button ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1" class="btn btn-default"><span class="glyphicon glyphicon-chevron-left"></span></button>
+                            <button ng-click="previous()" value="Previous Song" class="btn btn-default"><span class="glyphicon glyphicon-backward"></span></button>
+                            <button ng-show="state==1" type="button" ng-click="pause()" class="btn btn-default"><span class="glyphicon glyphicon-pause"></span></button>
+                            <button ng-show="state==2 || state == 0" ng-click="resume()" value="Resume" class="btn btn-default"><span class="glyphicon glyphicon-play"></span></button>
+                            <button ng-show="state==3" class="btn btn-default"><img src="./img/loading.gif" height="18px"/></button>
+                            <button ng-click="next()" value="Next Song" class="btn btn-default"><span class="glyphicon glyphicon-forward"></span></button>
+                            <button ng-disabled="currentPage >= data.length/pageSize - 1" ng-click="currentPage=currentPage+1" class="btn btn-default"> <span class="glyphicon glyphicon-chevron-right"></span></button>
                         </div>
-                        <div class="col-xs-10">
-                            <div class="song-name"> {{item.name}} </div>
-                            <div class="social">
-                                <!--<span class="glyphicon glyphicon-thumbs-up"></span>{{item.likes.summary.total_count}}
-                                <span class="glyphicon glyphicon-comment"></span>{{item.comments.summary.total_count}}-->
+
+                        <div class="clearfix"></div>
+                    </div>
+                    <div class="song row" ng-click="play($index)" ng-repeat="item in data  | startFrom:currentPage*pageSize | limitTo:pageSize  track by $index">
+                        <div class="link" >
+                            <div class="song-thumbnail col-xs-2">
+                                <img ng-src="{{item.picture}}"/>
+                            </div>
+                            <div class="col-xs-10">
+                                <div class="song-name"> {{item.name}} </div>
+                                <div class="social">
+                                    <!--<span class="glyphicon glyphicon-thumbs-up"></span>{{item.likes.summary.total_count}}
+                                    <span class="glyphicon glyphicon-comment"></span>{{item.comments.summary.total_count}}-->
+                                </div>
                             </div>
                         </div>
+                        <div class="clearfix"> </div>
                     </div>
                     <div class="clearfix"> </div>
-                </div>
-                <div class="clearfix"> </div>
-                <div class="row ">
+                    <div class="row ">
 
+                    </div>
                 </div>
-            </div>
-            <div id="song-info" class="col-xs-5">
-                <img ng-src="{{item.picture}}"/>
-                {{item.name}}
-            </div>
-            <div>
-                <!-- <input type="button" ng-click="sortByLike()" value="Top Rated"> -->
+                <div id="song-info" class="col-xs-5">
+                    <img ng-src="{{item.picture}}"/>
+                    {{item.name}}
+                </div>
+                <div>
+                    <!-- <input type="button" ng-click="sortByLike()" value="Top Rated"> -->
+                </div>
             </div>
         </div>
-    </div>
+    </body>
     <script type="text/javascript" src="js/foreground/client.js"></script>
-</body>
-
 </html>
