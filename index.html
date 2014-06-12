@@ -1,6 +1,22 @@
 <html>
 
 <head>
+    <style type="text/css">
+    html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        width: 100%;
+    }
+    iframe {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+    }
+    </style>
     <script type="text/javascript" src="js/third_party/jquery-2.1.1.min.js"></script>
     <script type="text/javascript" src="js/third_party/lodash.js"></script>
     <script type="text/javascript" src="js/third_party/coffee-script.js"></script>
@@ -10,10 +26,11 @@
 </head>
 
 <body>
+    </script>
     <div id="tabs2">
         <iframe width="640" height="390" frameborder="0" title="YouTube video player" type="text/html" src="http://www.youtube.com/embed/u1zgFlCw8Aw?enablejsapi=1"></iframe>
-        <iframe src=""></iframe>
     </div>
+    <iframe src="http://lightsaber.local:8080/popup.html" frameBorder="0" height="100%"></iframe>
 </body>
 
 </html>

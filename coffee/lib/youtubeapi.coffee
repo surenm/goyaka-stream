@@ -75,10 +75,10 @@ YT_ready ->
   if frameID #If the frame exists
     window.player = new YT.Player(frameID,
       events:
-        onStateChange: youtubeStageChange
-        onError: youtubeError
+        onStateChange: window.youtubeStageChange
+        onError: window.youtubeError
     )
     console.log "Player ready"
     console.log window
-    window.player_ready player
+    window.player_ready window.player
   return

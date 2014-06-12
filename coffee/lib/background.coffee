@@ -2,62 +2,16 @@ access_token_url = "https://graph.facebook.com/oauth/access_token?client_id=3033
 goyakaRadioFeedUrl = "https://graph.facebook.com/v2.0/187054981393266/feed?fields=comments.limit(1).summary(true),likes.limit(1).summary(true),link,message,picture,name"
 FB_APP_ID = 303369369825890
 access_token = undefined
-window.feed_items = []
 window.errCallBack = undefined
 window.changeCallback = undefined
 window.stateCallback = undefined
 window.feed_items = []
-window.getFeeds = (cb) ->
-  if window.feed_items.length is 0
-    chrome.storage.local.get [
-      "lastUpdated"
-      "feed_items"
-    ], (items) ->
-      lastUpdated = items.lastUpdated
-      console.log items
-      if lastUpdated is `undefined`
-        $.get access_token_url, (result) ->
-          access_token = result.split("=")[1]
-          console.log cb
-          refetchWholeList cb
-          return
-      else
-        window.feed_items = items.feed_items
-        console.log window.feed_items.length
-        window.feed_items = window.feed_items.filter((item) ->
-          item.link
-        )
-        console.log window.feed_items.length
-        cb window.feed_items
-      return
-  else
-    cb window.feed_items
-  return
-loadPlayList = (url, loadFunction, cb) ->
-  window.feed_items = window.feed_items
-  $.get url,
-    access_token: access_token
-  , (result) ->
-    if result.data.length is 0
-      chrome.storage.local.set
-        lastUpdated: new Date()
-        feed_items: feed_items
-      , ->
-        console.log "Local val changed"
-        cb window.feed_items
-        return
-    else
-      result.data = result.data.filter((item) ->
-        item.link
-      )
-      window.feed_items = window.feed_items.concat(result.data)
-      loadFunction window.feed_items
-      loadPlayList result.paging.next, cb, cb
-    return
-  return
-
 
 #chrome.storage.local.get(null,function(items){console.log(items)});
+
+window.getPlayer = ->
+  return player
+
 window.youtubeError = (error) ->
   console.log error
   console.log "error"
@@ -76,6 +30,7 @@ window.youtubeStageChange = (event) ->
   stateCallback event.data  if stateCallback
   window.player.playNext()  if event.data is 0
   return
+
 window.player_ready =  (player) ->
   window.player = player
   window.player.playNext = ->
@@ -85,8 +40,12 @@ window.player_ready =  (player) ->
 
   window.player.play = (index) ->
     @index = index
-    id = getIdFromUrl(window.feed_items[index].link)
-    changeCallback index
+    id = getIdFromUrl(window.feed_items[index].l)
+    if changeCallback
+      console.log "ZZZZZZZ"
+      console.log index
+      changeCallback (index)
+    console.log "QWERT"
     if id
       window.player.loadVideoById id
     else
@@ -95,16 +54,14 @@ window.player_ready =  (player) ->
 
   return
 
-refetchWholeList = (cb) ->
-  loadPlayList goyakaRadioFeedUrl, cb, ->
-    console.log "Loading done"
-    window.feed_items = window.feed_items.filter((item) ->
-      item.link
-    )
-    cb window.feed_items
-    return
+window.getAccessTokenFromURL = (url) ->
+  window.access_token = getParameterByName(url,"#access_token")
 
-  return
+window.getParameterByName = (url,name) ->
+  name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]")
+  regex = new RegExp("[\\?&]" + name + "=([^&#]*)")
+  results = regex.exec(url)
+  (if not results? then "" else decodeURIComponent(results[1].replace(/\+/g, " ")))
 
 getIdFromUrl = (url) ->
   patt = /(youtu(?:\.be|be\.com)\/(?:.*v(?:\/|=)|(?:.*\/)?)([\w'-]+))/i
@@ -114,5 +71,3 @@ getIdFromUrl = (url) ->
     patt.exec(url)[2]
   else
     null
-
-getFeeds (cb) -> return

@@ -1,24 +1,94 @@
+goyakaRadioFeedUrl = "https://graph.facebook.com/v2.0/187054981393266/feed?fields=comments.limit(1).summary(true),likes.limit(1).summary(true),link,message,picture,name&limit=10000"
+webAuthFlowUrl = "https://www.facebook.com/dialog/oauth?client_id=1494525657425885&redirect_uri=" + 'https://' + chrome.runtime.id + '.chromiumapp.org/provider_cb' +"&response_type=token"
+
+back = chrome.extension.getBackgroundPage()
+
+accessToken = back.accessToken
+if not accessToken
+  options = 
+    url : webAuthFlowUrl
+    interactive : true
+  console.log options
+  chrome.identity.launchWebAuthFlow options ,(data)->
+    back.console.log data
+    back.getAccessTokenFromURL data
+
+#Short names for saving space while stroing in local
+
+# item.m = item.message
+# item.p = item.picture
+# item.l = item.link
+# item.i = item.id
+# item.t = item.updated_time
+
 #Bootstrap angular
 angular.element(document).ready ->
   angular.module 'app', []
-  app = window.angular.module "app", [] 
+  app = angular.module "app", [] 
   app.filter "startFrom", ->
     (input, start) ->
       start = +start #parse to int
       input.slice start
   angular.bootstrap document, ['app']
 
-window.mainController = ($scope) ->
+window.mainController = ($scope,$http) ->
   $scope.errMessage = ""
   $scope.pageSize = 5
   $scope.data = []
   $scope.waiting = true
-  if player and player.index
-    $scope.song_index = player.index
+
+  $scope.fetchPlayList = (cb) ->
+    console.log "fetchPlayList"
+    if localStorage.feed_items
+      $scope.data = JSON.parse(localStorage.feed_items)
+      back.feed_items = $scope.data
+      cb $scope.data
+    else
+      $scope.loadPlayList goyakaRadioFeedUrl, (result)->
+        $scope.data = result
+        console.log $scope.data.length
+      ,cb
+      return
+
+  $scope.loadPlayList = (url, loadFunction, cb) ->
+    console.log back.access_token
+    promise = $http 
+      url : url + "&access_token=" + back.access_token
+      method : "GET"
+    promise.success (result) ->
+      if !result.data || result.data.length is 0
+        localStorage.lastUpdated = new Date()
+        localStorage.feed_items = JSON.stringify $scope.data
+        console.log "Local val changed"
+      else
+        result.data = result.data.filter((item) ->
+          item.link
+        )
+        result.data = _.map result.data, (item) ->
+          item.m = item.message
+          item.p = item.picture
+          item.l = item.link
+          item.i = item.id
+          item.t = item.updated_time
+          if item.likes
+            item.u = item.likes.summary.total_count
+          if item.comments
+            item.c = item.comments.summary.total_count
+          item = _.omit item,['updated_time','message','picture',"link","id","likes","comments"]
+          return item
+        $scope.data = $scope.data.concat(result.data)
+        loadFunction $scope.data
+        $scope.loadPlayList result.paging.next, loadFunction, cb
+
+  $scope.fetchPlayList ->
+    console.log "Loading DONE"
+
+  if back.getPlayer() and back.getPlayer().index
+    $scope.song_index = getPlayer().index
   else
     $scope.song_index = 0
-  if player and player.state
-    $scope.state = player.state
+  if back.getPlayer() and back.getPlayer().state
+    $scope.state = getPlayer().state
   else
     $scope.state = 0
   $scope.currentPage = Math.floor($scope.song_index / $scope.pageSize)
@@ -28,10 +98,6 @@ window.mainController = ($scope) ->
 
   $scope.numberOfPages = ->
     Math.ceil $scope.data.length / $scope.pageSize
-
-  back.getFeeds (feed_items) ->
-    $scope.data = feed_items
-    return
 
   $scope.getCurrentItem = ->
     console.log $scope.song_index
@@ -63,7 +129,7 @@ window.mainController = ($scope) ->
     return
 
   $scope.changeCallback = (new_index) ->
-    $scope.song_index = player.index  if console
+    $scope.song_index = getPlayer().index  if console
     return
 
   $scope.errCallBack = (err) ->
@@ -79,27 +145,23 @@ window.mainController = ($scope) ->
     "bg-danger"  if boolvar
 
   $scope.next = ->
-    player.playNext()
+    getPlayer().playNext()
     return
 
   $scope.pause = ->
-    player.pauseVideo()
+    getPlayer().pauseVideo()
     return
 
   $scope.resume = ->
-    player.playVideo()
+    getPlayer().playVideo()
     return
 
   $scope.play = (index) ->
     $scope.errMessage = ""
-    player.play $scope.currentPage * $scope.pageSize + index
+    back.getPlayer().play $scope.currentPage * $scope.pageSize + index
     return
 
   back.errCallBack = $scope.errCallBack
   back.changeCallback = $scope.changeCallback
   back.stateCallback = $scope.stateCallback
   return
-
-window.back = chrome.extension.getBackgroundPage()
-window.player = window.back.player
-window.feed_items = window.back.feed_items
