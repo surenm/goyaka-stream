@@ -7,10 +7,12 @@
 
     "permissions": [
         "storage",
+        "identity",
         "unlimitedStorage",
         "webRequest",
         "webRequestBlocking",
-        "*://*.youtube.com/*"
+        "*://*.youtube.com/*",
+        "*://*.facebook.com/*"
     ],
     "browser_action": {
         "default_icon": "radio.png",

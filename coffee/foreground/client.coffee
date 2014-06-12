@@ -8,11 +8,31 @@ angular.element(document).ready ->
       input.slice start
   angular.bootstrap document, ['app']
 
-window.mainController = ($scope) ->
+#Graph API prefix
+graph_api_prefix = "https://graph.facebook.com/v2.0/"
+
+window.mainController = ($scope,$http) ->
   $scope.errMessage = ""
   $scope.pageSize = 5
   $scope.data = []
   $scope.waiting = true
+  $scope.song_index = 0
+
+  $scope.currentPage = Math.floor($scope.song_index / $scope.pageSize)
+  $scope.$watch "song_index", (oldVal, newVal) ->
+    $scope.currentPage = Math.floor($scope.song_index / $scope.pageSize)
+    $scope.getFBData()
+    return
+
+  $scope.getFBData = ->
+    id = $scope.getCurrentItem().id
+    url = graph_api_prefix + id + "?access_token=" + back.access_token
+    promise = $http 
+      url : url
+      method : "GET"
+    promise.success (data)->
+      $scope.currentData = data
+
   if player and player.index
     $scope.song_index = player.index
   else
@@ -21,11 +41,6 @@ window.mainController = ($scope) ->
     $scope.state = player.state
   else
     $scope.state = 0
-  $scope.currentPage = Math.floor($scope.song_index / $scope.pageSize)
-  $scope.$watch "song_index", (oldVal, newVal) ->
-    $scope.currentPage = Math.floor($scope.song_index / $scope.pageSize)
-    return
-
   $scope.numberOfPages = ->
     Math.ceil $scope.data.length / $scope.pageSize
 
@@ -72,7 +87,6 @@ window.mainController = ($scope) ->
         $scope.$apply ->
           $scope.errMessage = "This is song is not playable outside youtube."
           return
-
     return
 
   $scope.getErrorClass = (boolvar) ->

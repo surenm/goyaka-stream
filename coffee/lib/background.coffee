@@ -1,12 +1,24 @@
-access_token_url = "https://graph.facebook.com/oauth/access_token?client_id=303369369825890&client_secret=4bbe29c93ca31dfc8f116a9a4e3de670&grant_type=client_credentials"
-goyakaRadioFeedUrl = "https://graph.facebook.com/v2.0/187054981393266/feed?fields=comments.limit(1).summary(true),likes.limit(1).summary(true),link,message,picture,name"
-FB_APP_ID = 303369369825890
-access_token = undefined
+goyakaRadioFeedUrl = "https://graph.facebook.com/v2.0/187054981393266/feed?fields=comments.limit(1).summary(true),likes.limit(1).summary(true),link,message,picture,name&limit=10000"
+webAuthFlowUrl = "https://www.facebook.com/dialog/oauth?client_id=1494525657425885&redirect_uri=" + 'https://' + chrome.runtime.id + '.chromiumapp.org/provider_cb' +"&response_type=token"
+
+FB_APP_ID = 1494525657425885
+window.access_token = undefined
 window.feed_items = []
 window.errCallBack = undefined
 window.changeCallback = undefined
 window.stateCallback = undefined
 window.feed_items = []
+
+window.fetch_access_token = (cb)->
+  options = 
+    url : webAuthFlowUrl
+    interactive : true
+  console.log options
+  chrome.identity.launchWebAuthFlow options ,(data)->
+    console.log data
+    getAccessTokenFromURL data
+    cb()
+
 window.getFeeds = (cb) ->
   if window.feed_items.length is 0
     chrome.storage.local.get [
@@ -16,8 +28,7 @@ window.getFeeds = (cb) ->
       lastUpdated = items.lastUpdated
       console.log items
       if lastUpdated is `undefined`
-        $.get access_token_url, (result) ->
-          access_token = result.split("=")[1]
+        fetch_access_token (result) ->
           console.log cb
           refetchWholeList cb
           return
@@ -33,6 +44,7 @@ window.getFeeds = (cb) ->
   else
     cb window.feed_items
   return
+
 loadPlayList = (url, loadFunction, cb) ->
   window.feed_items = window.feed_items
   $.get url,
@@ -105,6 +117,15 @@ refetchWholeList = (cb) ->
     return
 
   return
+
+window.getAccessTokenFromURL = (url) ->
+  window.access_token = getParameterByName(url,"#access_token")
+
+window.getParameterByName = (url,name) ->
+  name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]")
+  regex = new RegExp("[\\?&]" + name + "=([^&#]*)")
+  results = regex.exec(url)
+  (if not results? then "" else decodeURIComponent(results[1].replace(/\+/g, " ")))
 
 getIdFromUrl = (url) ->
   patt = /(youtu(?:\.be|be\.com)\/(?:.*v(?:\/|=)|(?:.*\/)?)([\w'-]+))/i
